@@ -1,6 +1,7 @@
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const validator = require('validator');
 
 // REGISTER
 exports.register = async (req, res) => {
@@ -21,6 +22,9 @@ exports.register = async (req, res) => {
       password: hashedPassword,
       role
     });
+    if(!validator.isEmail(email)){
+  return res.json({success:false, message:"invalid email" })
+} 
 
     res.status(201).json({
       message: 'User registered successfully'
@@ -60,6 +64,7 @@ exports.login = async (req, res) => {
         role: user.role
       }
     });
+  
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
